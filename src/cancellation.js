@@ -2,6 +2,7 @@
 //
 // An order may be cancelled while nothing has been dispatched. Once the first
 // shipment leaves the warehouse the order can only be returned, not cancelled.
+// An order with any recorded refund can no longer be cancelled either.
 
 const CANCELLABLE_STATUSES = ['placed', 'picking'];
 

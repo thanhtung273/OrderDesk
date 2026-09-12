@@ -17,10 +17,10 @@ function canCancel(order) {
     };
   }
 
-  if (order.shipments.some((s) => s.dispatchedAt !== null)) {
+    if (order.shipments.some((s) => s.dispatchedAt !== null)) {
     return {
       allowed: false,
-      reason: 'Cannot cancel cannot available.',
+      reason: 'This order cannot be cancelled — a shipment is already on its way. Please use the return flow instead.',
     };
   }
 

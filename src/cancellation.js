@@ -2,7 +2,8 @@
 //
 // An order may be cancelled while nothing has been dispatched. Once the first
 // shipment leaves the warehouse the order can only be returned, not cancelled —
-// the refusal message should guide the clerk toward that flow.
+// the refusal message should guide the clerk toward that flow. An order with
+// any recorded refund can no longer be cancelled either.
 
 const CANCELLABLE_STATUSES = ['placed', 'picking'];
 
@@ -14,11 +15,21 @@ function canCancel(order) {
   if (!CANCELLABLE_STATUSES.includes(order.status)) {
     return {
       allowed: false,
-      reason: 'Cannot cancel cannot available.',
+      reason: 'This order cannot be cancelled.',
     };
   }
 
-    if (order.shipments.some((s) => s.dispatchedAt !== null)) {
+  if (order.refunds && order.refunds.length > 0) {
+    return {
+      allowed: false,
+      reason: 'This order cannot be cancelled because a refund has already been recorded.',
+    };
+  }
+
+  // Kept ORD-102's clarified message here instead of main's plain version:
+  // it tells the clerk what to do next (use the return flow), which the
+  // original refusal message from main did not.
+  if (order.shipments.some((s) => s.dispatchedAt !== null)) {
     return {
       allowed: false,
       reason: 'This order cannot be cancelled — a shipment is already on its way. Please use the return flow instead.',

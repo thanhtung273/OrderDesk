@@ -1,7 +1,8 @@
 // Cancellation rules for OrderDesk.
 //
 // An order may be cancelled while nothing has been dispatched. Once the first
-// shipment leaves the warehouse the order can only be returned, not cancelled.
+// shipment leaves the warehouse the order can only be returned, not cancelled —
+// the refusal message should guide the clerk toward that flow.
 
 const CANCELLABLE_STATUSES = ['placed', 'picking'];
 

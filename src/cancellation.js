@@ -2,6 +2,7 @@
 //
 // An order may be cancelled while nothing has been dispatched. Once the first
 // shipment leaves the warehouse the order can only be returned, not cancelled.
+// An order with any recorded refund can no longer be cancelled either.
 
 const CANCELLABLE_STATUSES = ['placed', 'picking'];
 
@@ -13,14 +14,21 @@ function canCancel(order) {
   if (!CANCELLABLE_STATUSES.includes(order.status)) {
     return {
       allowed: false,
-      reason: 'Cannot cancel cannot available.',
+      reason: 'This order cannot be cancelled.',
+    };
+  }
+
+  if (order.refunds && order.refunds.length > 0) {
+    return {
+      allowed: false,
+      reason: 'This order cannot be cancelled because a refund has already been recorded.',
     };
   }
 
   if (order.shipments.some((s) => s.dispatchedAt !== null)) {
     return {
       allowed: false,
-      reason: 'Cannot cancel cannot available.',
+      reason: 'This order cannot be cancelled because a shipment has already dispatched.',
     };
   }
 

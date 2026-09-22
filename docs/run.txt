@@ -1,0 +1,13 @@
+java -cp target\classes com.fsa.orderdesk.tools.LineTotals lines.csv
+lines: 2
+units: 4
+total: 549999
+
+echo exit=%ERRORLEVEL%
+exit=0
+
+java -cp target\classes com.fsa.orderdesk.tools.LineTotals bad.csv
+Error: Quantity must be a positive whole number: KB-01,-1,150000
+
+echo exit=%ERRORLEVEL%
+exit=1
